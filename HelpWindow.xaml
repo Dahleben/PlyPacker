@@ -1,0 +1,122 @@
+﻿<Window x:Class="PlyPackerGUI.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Help - AutoCAD Ply Packer" Height="650" Width="550" 
+        Background="#F9F9F9" WindowStartupLocation="CenterOwner">
+
+    <!-- Shared Styles for consistent formatting -->
+    <Window.Resources>
+        <Style x:Key="HeadingStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="#007ACC"/>
+            <Setter Property="Margin" Value="0,15,0,5"/>
+        </Style>
+        <Style x:Key="SubHeadingStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Margin" Value="0,10,0,2"/>
+        </Style>
+        <Style x:Key="BodyStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20">
+        <StackPanel>
+
+            <TextBlock Text="AutoCAD Ply Packer - User Guide" 
+                       FontWeight="Bold" FontSize="20" Foreground="#222222" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+
+            <!-- SECTION 1 -->
+            <TextBlock Text="1. Getting Started / General Overview" Style="{StaticResource HeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                The AutoCAD Ply Packer is an automated nesting utility designed to efficiently arrange rectangular composite plies (or any rectangular parts) onto a continuous roll or flat sheet of raw material. Its primary goal is to minimize material waste and calculate precise linear stock utilization as well as save time on laying out plies.<LineBreak/><LineBreak/>
+
+The application achieves this through a multi-stage geometric engine. First, it groups parallel plies together and pre-rotates them to their required angles. It then applies your specified padding (Gap) and uses a bottom-left greedy packing algorithm to find the tightest fit within the sheet boundaries. Finally, if the gap chosen is 0 units, it simulates a 2D "gravity drop" and lateral edge-snapping to perfectly align flush edges and eliminate microscopic gaps.<LineBreak/><LineBreak/>
+
+Once the layout is mathematically packed in the system's memory, the software translates these geometric coordinates into a standard AutoCAD Script file (.scr). This script is a sequential list of native AutoCAD commands that, when executed, will automatically create standard layers, draw the cut boundaries using lightweight polylines (PLINE), stamp the center of each ply with its designated label (TEXT), and silently purge the drawing of unused data.
+            </TextBlock>
+
+            <!-- SECTION 2 -->
+            <TextBlock Text="2. Managing Ply Data in the Grid" Style="{StaticResource HeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                The data grid is designed for fast data entry, operating similarly to standard spreadsheet software like Excel.<LineBreak/><LineBreak/>You can navigate quickly between cells using your keyboard shortcuts:<LineBreak/>• Press the Tab key to commit your edit and move to the next cell on the right.<LineBreak/>• Press the Enter key to commit your edit and move directly down to the cell below.<LineBreak/>• Press Shift + Enter to move back up to the previous row.
+            </TextBlock>
+
+            <TextBlock Text="Add, Duplicate, and Remove Rows" Style="{StaticResource SubHeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                To manually expand your list of plies, click the '➕ Add Row' button to append a single new ply with default dimensions to the bottom of the grid.<LineBreak/><LineBreak/>To speed up data entry for repeating parts, you can duplicate or delete multiple items at once. First, select the cells or rows you want to modify. You can select multiple items by holding down the 'Ctrl' key while clicking individual cells, or by holding 'Shift' and clicking to select a continuous block of cells.<LineBreak/><LineBreak/>Once your items are highlighted:<LineBreak/>• Click '📋 Duplicate Selected' to create an exact copy of each highlighted ply. The system will automatically append '_copy' to the name of the new duplicates so you can easily identify them.<LineBreak/>• Click '➖ Remove Selected' to instantly delete all highlighted plies from the grid.
+            </TextBlock>
+
+            <!-- SECTION 3 -->
+            <TextBlock Text="3. Importing and Pasting Data" Style="{StaticResource HeadingStyle}"/>
+
+            <TextBlock Text="Loading a CSV File" Style="{StaticResource SubHeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                You can import bulk data using the 'Load CSV' button, which opens a file browser to select your comma-separated values (.csv) file.<LineBreak/><LineBreak/>For the import to work correctly, the very first row of your CSV file must contain headers identifying the columns. The recognized headers are:<LineBreak/>• name<LineBreak/>• length<LineBreak/>• width<LineBreak/>• angle<LineBreak/>• isolate (Optional)<LineBreak/><LineBreak/>The headers are not case-sensitive and can be in any order. Please note that the 'isolate' column is entirely optional. If your CSV does not contain an isolate column, the file will still import perfectly and all plies will simply default to being unchecked (grouped normally).
+            </TextBlock>
+
+            <TextBlock Text="Pasting from Excel (Ctrl+V)" Style="{StaticResource SubHeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                To quickly transfer large amounts of data from external spreadsheet software like Microsoft Excel or Google Sheets, you can use the built-in clipboard paste feature.<LineBreak/><LineBreak/>Simply highlight the rows and columns in your spreadsheet and copy them (Ctrl+C). Then, click on the specific starting cell within the Ply Packer data grid where you want the pasted data to begin.<LineBreak/><LineBreak/>Press 'Ctrl+V', and the application will automatically cascade the copied data downwards and to the right. It will overwrite the existing cells and intelligently generate new rows on the fly if your pasted data extends past the bottom of the current grid.
+            </TextBlock>
+
+            <!-- SECTION 4 -->
+            <TextBlock Text="4. Understanding the Data Columns" Style="{StaticResource HeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                Each column in the data grid defines the specific physical parameters for a single rectangular ply:<LineBreak/><LineBreak/>• Name: The label or part number for the piece. This text will be drawn directly into the center of the cut shape in the final AutoCAD file for easy identification.<LineBreak/>• Length: The primary physical dimension (X-axis) of the unrotated rectangular shape.<LineBreak/>• Width: The secondary physical dimension (Y-axis) of the unrotated rectangular shape.<LineBreak/>• Angle: The required rotation angle (in degrees). The engine will automatically rotate the rectangle by this exact angle before it begins packing, which is essential for ensuring correct structural fiber orientation.
+            </TextBlock>
+
+            <TextBlock Text="The 'Isolate' Checkbox" Style="{StaticResource SubHeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                The 'Isolate' checkbox fundamentally changes how the packing engine handles a specific piece. By default, the algorithm groups all plies with the exact same angle into a single, tightly clustered block before placing them on the sheet. Checking 'Isolate' bypasses this clustering phase, forcing the engine to treat that ply as a completely independent, standalone shape.<LineBreak/><LineBreak/>This is highly useful when the default clustering creates an awkward, bulky block that results in suboptimal packing. By isolating specific plies, the global packing engine can squeeze them individually into small, empty gaps across the board, often resulting in a much tighter and more efficient layout.<LineBreak/><LineBreak/>⚠️ Warning: Marking too many plies as Isolated will dramatically increase the number of individual contours the global engine must evaluate, which can cause the program's calculation time to slow down significantly.<LineBreak/><LineBreak/>💡 Pro-Tip Workaround: If you want to separate a ply out of a massive cluster but want to avoid the performance hit of completely isolating it, you can add 360 to the ply's angle (for example, change a 45-degree ply to 405 degrees). Structurally and physically, the part will be cut at the exact same orientation, but the engine will read it as a unique angle and group it into a brand new, separate cluster.<LineBreak/><LineBreak/>Both the Isolate checkbox and the 360-degree workaround are intended to be tools for experimentation. You are encouraged to toggle these settings and use the "Pack Plies &amp; Preview" button to quickly test different strategies until you achieve the most optimal packing layout for your job.
+            </TextBlock>
+
+            <!-- SECTION 5 -->
+            <TextBlock Text="5. Packing Configuration Parameters" Style="{StaticResource HeadingStyle}"/>
+
+            <TextBlock Text="Sheet Size &amp; Keep Border" Style="{StaticResource SubHeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                The Sheet Size parameters define the boundaries of your raw material. The Width is typically a fixed value depending on the specific material you are using (for example, standard rolls of Fiberglass vs. Carbon Fiber often have different manufactured widths). However, because the material is supplied on a continuous roll, the Length parameter is highly flexible and can be increased as much as needed to ensure all your plies fit.<LineBreak/><LineBreak/>The 'Keep Border' checkbox controls whether the outer rectangular boundary of the sheet is drawn into the final AutoCAD file on Layer 0. In order to export the final file to the cutting machine, this outer bounding box must ultimately be deleted. Unchecking this box tells the software to automatically omit the border for you, saving you a manual deletion step. However, you can leave it checked if you prefer to have the physical roll boundaries visually represented when reviewing the file in AutoCAD.
+            </TextBlock>
+
+            <TextBlock Text="Gap &amp; Grid Step" Style="{StaticResource SubHeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                The Gap parameter defines the physical padding added around each ply to ensure the cutting blade has enough clearance and that parts do not overlap. Note: Setting the Gap to exactly 0 invokes specialized zero-tolerance logic. While a 0 gap saves material by allowing parts to share cut lines, it takes significantly longer to compute because the engine must execute additional, computationally heavy stages to slide parts together, eliminate minuscule fractional gaps, and consolidate overlapping edges into single, continuous cut lines.<LineBreak/><LineBreak/>The Grid Step controls the underlying resolution of the packing algorithm. As the engine scans the sheet to place a piece, it moves across the board by this exact increment (e.g., jumping 0.125 units at a time to test for a valid fit). Smaller numbers allow the engine to find much tighter, more precise fits, but be warned: decreasing the Grid Step increases the number of calculated coordinates, making the computation time exponentially longer.<LineBreak/><LineBreak/>Recommendations for Grid Step:<LineBreak/>• For Maximum Packing Efficiency: Set the Grid Step to a positive number that is slightly less than your Gap size.<LineBreak/>• If your Gap is 0: A Grid Step of 0.125 is highly recommended to balance precision and performance without freezing the application.<LineBreak/>• If Speed is the Priority: If you need the program to generate a layout quickly and absolute maximum material density is not required, use a Grid Step of 0.125 or greater.
+            </TextBlock>
+
+            <TextBlock Text="Text Settings (Size &amp; Rotation)" Style="{StaticResource SubHeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                The Text Size parameter controls the height of the identifying labels stamped into the center of each ply in the final AutoCAD file. You should adjust this value based on the physical size of your parts—making it large enough to be easily readable by the operator, but small enough so that the text doesn't spill outside the boundaries of the cut shape.<LineBreak/><LineBreak/>The 'Rotate Text' checkbox determines the orientation of these labels. When checked, the text will be rotated to match the exact angle of the ply it belongs to, aligning seamlessly with the part's edges. When unchecked, all text labels will remain perfectly horizontal (0 degrees) across the entire sheet, regardless of how the underlying ply was rotated by the packing engine.
+            </TextBlock>
+
+            <TextBlock Text="Deadzones (Top, Bottom, Left, Right)" Style="{StaticResource SubHeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                Deadzones allow you to define an un-cuttable margin around the outer perimeter of your raw material. By entering values for the Top, Bottom, Left, and Right deadzones, you force the packing engine to strictly avoid these specific edges and only place plies within the remaining "safe" effective area of the sheet.<LineBreak/><LineBreak/>This feature is crucial for real-world manufacturing constraints. For example, you may need to leave empty space along the sides for the cutting machine's roller feeds to grip the material, reserve space at the top and bottom for physical holding clamps, or simply avoid the frayed and uneven natural edges of a raw material roll.
+            </TextBlock>
+
+            <!-- SECTION 6 -->
+            <TextBlock Text="6. Console Log &amp; Previewing" Style="{StaticResource HeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                The Console Log acts as a real-time progress monitor, displaying exactly what the mathematical engine is doing behind the scenes. Because complex packing configurations (like a 0 gap or a tiny Grid Step) can take several seconds or even minutes to compute, the console prints out each stage of the process—such as grouping plies, scanning the bounding box, and closing gaps—so you know the application is actively working and hasn't frozen.<LineBreak/><LineBreak/>The 'Pack Plies &amp; Preview' button is your primary tool for testing layouts. Instead of immediately writing an AutoCAD file to your hard drive, it runs the packing algorithm and caches the results in the system's memory. Once the math is complete, it opens a dedicated visual pop-up window where you can inspect exactly how the parts are arranged on the sheet.<LineBreak/><LineBreak/>Simultaneously, the console will display key metrics at the end of the run, including the total linear stock needed and the overall material area efficiency. This allows you to evaluate your material utilization and tweak your parameters as many times as you want before exporting.
+            </TextBlock>
+
+            <!-- SECTION 7 -->
+            <TextBlock Text="7. Exporting to AutoCAD" Style="{StaticResource HeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                Once you are satisfied with the packing layout shown in the preview window, click the 'Save to AutoCAD Script' button to generate your final output file.<LineBreak/><LineBreak/>Because the heavy mathematical calculations were already completed and stored in the system's memory during the preview phase, saving the file is nearly instantaneous. Clicking this button will open a standard file browser where you can name your script and choose where to save it on your computer as an AutoCAD '.scr' file.<LineBreak/><LineBreak/>Please note that this button will remain disabled (grayed out) when you first open the application, or if you change your ply data, until you have successfully run a packing preview to generate the necessary geometry.
+            </TextBlock>
+
+            <TextBlock Text="Running the Script in AutoCAD" Style="{StaticResource SubHeadingStyle}"/>
+            <TextBlock Style="{StaticResource BodyStyle}">
+                To execute your generated file, first open a new or existing drawing in AutoCAD.<LineBreak/><LineBreak/>The fastest way to load the layout is to type SCRIPT directly into the AutoCAD command line and press Enter. This will open a file browser where you can navigate to and select your saved '.scr' file.<LineBreak/><LineBreak/>Alternatively, if you prefer using the ribbon menu, you can navigate to the 'Manage' tab at the top of the screen and click the 'Run Script' button to open the same file browser.<LineBreak/><LineBreak/>Once you select the file, AutoCAD will rapidly execute the generated commands to draw your complete layout. The script is specially programmed to automatically run a 'Purge' command at the very end of its execution, which silently cleans the drawing of any unused layers, blocks, or leftover data to keep your file size optimized and ready for the cutting machine.
+            </TextBlock>
+
+        </StackPanel>
+    </ScrollViewer>
+</Window>

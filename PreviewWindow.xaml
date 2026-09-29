@@ -1,0 +1,17 @@
+﻿<Window x:Class="PlyPackerGUI.PreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Packing Preview" Height="600" Width="900" Background="#2E2E2E" WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Foreground="White" Text="Packing efficiency may improve by marking plies as Isolated" HorizontalAlignment="Center" />
+        <Viewbox Grid.Row ="1" Stretch="Uniform" Margin="20">
+            <!-- The Canvas acts as the bounding box sheet. The Viewbox handles zooming it to fit the window perfectly -->
+            <Canvas x:Name="PreviewCanvas" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Viewbox>
+    </Grid>
+</Window>
